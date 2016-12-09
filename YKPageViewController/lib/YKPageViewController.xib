@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="YKPageViewController" customModule="YKPageViewController" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="nYJ-Vg-tWz" id="hvE-21-tAn"/>
+                <outlet property="menuScrollView" destination="xvh-20-Ecl" id="Rzw-4B-fdl"/>
+                <outlet property="menuView" destination="yFK-Fr-Cul" id="R1V-Mr-4J7"/>
+                <outlet property="menuViewWidthConstraint" destination="pjA-3b-zc1" id="Aq2-IK-IDt"/>
+                <outlet property="view" destination="iN0-l3-epB" id="HIK-Ax-nO0"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xvh-20-Ecl">
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yFK-Fr-Cul"/>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="375" id="PVk-aO-PHI"/>
+                        <constraint firstItem="yFK-Fr-Cul" firstAttribute="top" secondItem="xvh-20-Ecl" secondAttribute="top" id="cUE-ah-NxD"/>
+                        <constraint firstItem="yFK-Fr-Cul" firstAttribute="leading" secondItem="xvh-20-Ecl" secondAttribute="leading" id="dYC-OF-Q5M"/>
+                        <constraint firstAttribute="trailing" secondItem="yFK-Fr-Cul" secondAttribute="trailing" id="giT-3a-e2a"/>
+                        <constraint firstAttribute="bottom" secondItem="yFK-Fr-Cul" secondAttribute="bottom" id="luN-AW-dz1"/>
+                        <constraint firstItem="yFK-Fr-Cul" firstAttribute="height" secondItem="xvh-20-Ecl" secondAttribute="height" id="pJw-Td-gSm"/>
+                        <constraint firstAttribute="height" constant="44" id="pev-Ep-2J8"/>
+                        <constraint firstItem="yFK-Fr-Cul" firstAttribute="width" secondItem="xvh-20-Ecl" secondAttribute="width" id="pjA-3b-zc1"/>
+                    </constraints>
+                </scrollView>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nYJ-Vg-tWz">
+                    <frame key="frameInset" minY="108"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="xvh-20-Ecl" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="64" id="eCZ-hd-eDQ"/>
+                <constraint firstAttribute="trailing" secondItem="xvh-20-Ecl" secondAttribute="trailing" id="lAm-0n-OBx"/>
+                <constraint firstItem="xvh-20-Ecl" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="yTq-nB-mOf"/>
+            </constraints>
+            <point key="canvasLocation" x="63.5" y="54.5"/>
+        </view>
+    </objects>
+</document>
