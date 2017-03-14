@@ -31,12 +31,15 @@ class YKPageViewController: UIViewController, UIPageViewControllerDelegate, UIPa
     @IBOutlet weak var menuScrollView: UIScrollView!
     @IBOutlet weak var menuView: UIView!
     @IBOutlet weak var menuViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var menuBackgroundView: UIView!
     @IBOutlet weak var contentView: UIView!
     
     var pageInfoList: [PageInfo] = []
     var currentPageIndex = 0
     var menuViewMode = MenuViewMode.SinglePage
     var menuItemViewWidth: CGFloat?
+    var menuBackgroundDesignView: UIView?
+    var shouldIgnoreScrollDelegate = false
     
     private var pageViewController: UIPageViewController!
     private var menuScrollOffsetXList: [CGFloat] = []
@@ -47,6 +50,10 @@ class YKPageViewController: UIViewController, UIPageViewControllerDelegate, UIPa
         // 勝手なスクロール調節させない
         self.automaticallyAdjustsScrollViewInsets = false
         
+        if let designView = self.menuBackgroundDesignView {
+            self.menuBackgroundView.addSubview(designView)
+        }
+        
         // ページビューコントローラ準備
         self.setupPageViewController()
         
@@ -56,6 +63,13 @@ class YKPageViewController: UIViewController, UIPageViewControllerDelegate, UIPa
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        self.menuBackgroundView.frame.size.width = self.view.frame.width / CGFloat(self.pageInfoList.count)
+        if let designView = self.menuBackgroundDesignView {
+            designView.center = self.menuBackgroundView.center
+        }
     }
     
     // ページビューコントローラもろもろ
@@ -217,18 +231,35 @@ class YKPageViewController: UIViewController, UIPageViewControllerDelegate, UIPa
     
     // メニューがタップされた
     func menuDidSelectByTap(index: Int) {
+        guard index - 1 != self.currentPageIndex else {
+            return
+        }
         // 前のメニューを非選択状態に
         self.pageInfoList[self.currentPageIndex].menuItemView.didDeselect()
         // インデックス更新
+        let direction: UIPageViewControllerNavigationDirection = index - 1 > self.currentPageIndex ? .forward : .reverse
         self.currentPageIndex = index - 1
         // 画面入れ替え
-        self.pageViewController.setViewControllers([self.pageInfoList[self.currentPageIndex].vc], direction: .forward, animated: false, completion: nil)
+        self.pageViewController.setViewControllers(
+            [self.pageInfoList[self.currentPageIndex].vc],
+            direction  : direction,
+            animated   : true,
+            completion : { (_) in
+                self.shouldIgnoreScrollDelegate = false
+        })
         // 新しいメニューを選択状態に
         self.pageInfoList[self.currentPageIndex].menuItemView.didSelect()
         // メニューをスクロール
         if self.menuViewMode == .Scroll {
             self.menuScrollView.setContentOffset(CGPoint(x: self.menuScrollOffsetXList[self.currentPageIndex], y: 0), animated: true)
         }
+        
+        self.shouldIgnoreScrollDelegate = true
+        UIView.animate(
+            withDuration: 0.2,
+            animations: {
+                self.menuBackgroundView.frame.origin.x = self.pageInfoList[self.currentPageIndex].menuItemView.frame.origin.x
+        })
     }
     
     // スクロールデリゲート
@@ -244,6 +275,19 @@ class YKPageViewController: UIViewController, UIPageViewControllerDelegate, UIPa
             }
             if offsetXDiff != 0 {
                 self.menuScrollView.contentOffset.x = self.menuScrollOffsetXList[self.currentPageIndex] + movedOffsetX / (self.view.frame.size.width / offsetXDiff)
+            }
+        }
+        else {
+            guard !self.shouldIgnoreScrollDelegate else {
+                return
+            }
+            let movedOffsetX = scrollView.contentOffset.x - self.view.frame.size.width
+            self.menuBackgroundView.frame.origin.x = self.pageInfoList[self.currentPageIndex].menuItemView.frame.origin.x + movedOffsetX / CGFloat(self.pageInfoList.count)
+            if self.menuBackgroundView.frame.origin.x > self.view.frame.size.width - self.menuBackgroundView.frame.width / 2 {
+                self.menuBackgroundView.frame.origin.x -= self.view.frame.size.width
+            }
+            else if self.menuBackgroundView.frame.origin.x < -self.menuBackgroundView.frame.width / 2 {
+                self.menuBackgroundView.frame.origin.x += self.view.frame.size.width
             }
         }
     }
